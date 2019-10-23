@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao'//GreenDao 的 插件
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //不检查png的合法性，这个大家可以根据自己的项目来判断是否开启。
+    aaptOptions {
+        cruncherEnabled false
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    //greendao配置
+    greendao {
+        //版本号，升级时可配置
+        schemaVersion 1
+        daoPackage 'com.as.greendao.gen'
+        targetGenDir 'src/main/java'
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+
+    compile 'com.github.zhangqifan1:TheShape:1.1.1'
+
+    //使用OKGO
+    compile 'com.lzy.net:okgo:3.0.4'
+    compile 'com.lzy.net:okrx2:2.0.2'
+    compile 'com.lzy.net:okserver:2.0.5'
+
+    //greendao依赖
+    compile 'org.greenrobot:greendao:3.2.2' // add library
+    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.3'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.1'//GreenDao 加密
+
+    //Eventbus
+    compile 'org.greenrobot:eventbus:3.1.1'
+
+    //Fragmentation
+    compile 'me.yokeyword:fragmentation:1.3.6'
+
+    //沉浸式的依赖
+    compile 'com.jaeger.statusbarutil:library:1.5.1'
+
+    //Gson
+    compile 'com.google.code.gson:gson:2.8.5'
+
+    //万能工具类  直接粘如项目了
+    compile 'com.blankj:utilcode:1.25.8'
+
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".TabActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.flyco.tablayout.CommonTabLayout
+            android:id="@+id/slidtab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp80"
+            android:layout_gravity="center_vertical"
+
+            android:layout_marginTop="@dimen/dp40"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tl:tl_iconGravity="RIGHT"
+            tl:tl_indicator_width="0dp"
+
+            tl:tl_tab_space_equal="true"
+
+            tl:tl_textSelectColor="@color/colorAccent"
+            tl:tl_textUnselectColor="@color/coral"
+            tl:tl_textsize="16sp"
+
+            tools:ignore="MissingConstraints" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
