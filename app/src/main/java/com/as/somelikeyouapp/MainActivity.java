@@ -4,21 +4,27 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.transition.TransitionManager;
 
 import com.as.base_lib_sly.base.ui.activity.BaseActivity;
 import com.as.somelikeyouapp.GlideUtils.progress.ProgressInterceptor;
 import com.as.somelikeyouapp.GlideUtils.progress.ProgressListener;
 import com.as.somelikeyouapp.databinding.ActivityMainBinding;
+import com.as.somelikeyouapp.service.LocalMusicService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
@@ -32,6 +38,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private ProgressDialog progressDialog;
     private MyReceiver myReceiver;
     public static SeekBar seekbar;
+    private ConstraintLayout mainBot;
 
     @Override
     protected int getLayoutId() {
@@ -47,23 +54,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void initView() {
 
 
-
-
 //        startActivity(new Intent(this, TabActivity.class));
-//
-//        myReceiver = new MyReceiver();
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction("media_progress");
-//        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, intentFilter);
-//
-//
-//        Intent intent = new Intent(this, LocalMusicService.class);
-//        intent.setAction(LocalMusicService.ACTION_Play);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            this.startForegroundService(intent);
-//        } else {
-//            this.startService(intent);
-//        }
+
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("media_progress");
+        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, intentFilter);
+
+
+        Intent intent = new Intent(this, LocalMusicService.class);
+        intent.setAction(LocalMusicService.ACTION_Play);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.startForegroundService(intent);
+        } else {
+            this.startService(intent);
+        }
 
 
     }
@@ -78,7 +83,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void initListener() {
 
-        seekbar = mViewBinding.seekbar;
+//        seekbar = mViewBinding.seekbar;
 
         ProgressInterceptor.addListener(imagePath, new ProgressListener() {
             @Override
@@ -105,6 +110,34 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         ProgressInterceptor.removeListener(imagePath);
                     }
                 });
+
+
+        ConstraintSet mConstraintSet1 = new ConstraintSet();
+        ConstraintSet mConstraintSet2 = new ConstraintSet();
+
+        mainBot = mViewBinding.mainBot;
+        //把默认 constraintLayout 布局放到 mConstraintSet1 中
+        mConstraintSet1.clone(mainBot);
+
+        //把标定位置变换的 constraintLayout 布局放到 mConstraintSet2 中
+        mConstraintSet2.clone(this, R.layout.bot);
+
+
+        mViewBinding.star1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransitionManager.beginDelayedTransition(mainBot);
+                mConstraintSet2.applyTo(mainBot);
+            }
+        });
+
+        mViewBinding.star2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransitionManager.beginDelayedTransition(mainBot);
+                mConstraintSet1.applyTo(mainBot);
+            }
+        });
 
 
     }
